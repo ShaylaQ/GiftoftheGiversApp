@@ -1,13 +1,13 @@
-﻿namespace GiftoftheGiversApp.Models.Entities
+﻿
+using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
+
+namespace GiftoftheGiversApp.Models.Entities
 {
-    public class User    { 
-        public int id { get; set; }
-        public string Fname { get; set; }
-        public string Surname { get; set; }
-        public string Email { get; set; }
-        public string UPass { get; set; }
-        public string Position { get; set; }
+    public class User : IdentityUser
+    {
+        public string Name { get; set; }
 
-
+     
     }
 }
