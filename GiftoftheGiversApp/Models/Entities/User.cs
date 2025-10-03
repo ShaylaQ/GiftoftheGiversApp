@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace GiftoftheGiversApp.Models.Entities
 {
-    public class User 
+    public class User : IdentityUser
     {
         public int UserId { get; set; }
         public string Name { get; set; }
