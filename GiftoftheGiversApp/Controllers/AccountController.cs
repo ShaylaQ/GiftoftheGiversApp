@@ -1,4 +1,9 @@
 ﻿using Azure.Identity;
+using GiftoftheGiversApp.Data;
+using GiftoftheGiversApp.Models.Entities;
+using GiftoftheGiversApp.ViewModels;
+using Microsoft.AspNetCore.Identity;
+using Azure.Identity;
 using GiftoftheGiversApp.Models.Entities;
 using GiftoftheGiversApp.ViewModels;
 using Microsoft.AspNetCore.Identity;
@@ -52,12 +57,13 @@ namespace GiftoftheGiversApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
-            if (ModelState.IsValid) {
+            if (ModelState.IsValid)
+            {
                 User user = new User
                 {
-                   Name = model.Name,
-                   Email =  model.Email,
-                   UserName=model.Email,
+                    Name = model.Name,
+                    Email = model.Email,
+                    UserName = model.Email,
 
                 };
 
@@ -100,7 +106,7 @@ namespace GiftoftheGiversApp.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("ChangePassword", "Account", new { username = user.UserName });
+                    return RedirectToAction("ChangePassword", "Account", new { username = user.Name });
                 }
             }
             return View(model);
@@ -161,5 +167,9 @@ namespace GiftoftheGiversApp.Controllers
     }
 }
 
-    
+
+
+
+
+
 

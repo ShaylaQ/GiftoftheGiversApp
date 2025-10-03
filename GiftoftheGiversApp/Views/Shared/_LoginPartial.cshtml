@@ -1,24 +1,27 @@
-﻿@using GiftoftheGiversApp.Models.Entities
-@using Microsoft.AspNetCore.Identity;
-@inject SignInManager<User> signInManager
+﻿
 
-<ul class="navbar">
-    @if (signInManager.IsSignedIn(User))
+@{
+    var isLoggedIn = Context.Session.GetInt32("UserId") != null;
+    var name = Context.Session.GetString("UserName");
+}
+
+<ul class="navbar-nav">
+    @if (isLoggedIn)
     {
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-controller="Account" asp-action="Logout">Logout</a>
+            <span class="nav-link">Hello, @name</span>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Account" asp-action="Logout">Logout</a>
         </li>
     }
     else
     {
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Login</a>
+            <a class="nav-link" asp-controller="Account" asp-action="Login">Login</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Register</a>
+            <a class="nav-link" asp-controller="Account" asp-action="Register">Register</a>
         </li>
-
     }
-
-
 </ul>
