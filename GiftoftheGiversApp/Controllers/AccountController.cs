@@ -1,12 +1,9 @@
-﻿using Azure.Identity;
-using GiftoftheGiversApp.Data;
+﻿
 using GiftoftheGiversApp.Models.Entities;
 using GiftoftheGiversApp.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Azure.Identity;
-using GiftoftheGiversApp.Models.Entities;
-using GiftoftheGiversApp.ViewModels;
-using Microsoft.AspNetCore.Identity;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata;
 

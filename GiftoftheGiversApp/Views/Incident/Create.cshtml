@@ -1,47 +1,39 @@
 ﻿@model GiftoftheGiversApp.Models.Entities.IncidentReport
 
-@{
-    ViewData["Title"] = "Incident Report";
-    Layout = "~/Views/Shared/_AccountLayout.cshtml";
 
+@{
+    ViewData["Title"] = "Report a Incident";
 }
 
-<h2 class="text-center mb-4">Report a Disaster Incident</h2>
+<h2>Report Incident</h2>
 
 <form asp-action="Create" method="post">
-    @Html.AntiForgeryToken()
-
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-    < <div class="mb-3">
-        <label asp-for="Incident" class="form-label"></label>
+    <div class="form-group">
+        <label asp-for="Incident" class="control-label"></label>
         <input asp-for="Incident" class="form-control" />
         <span asp-validation-for="Incident" class="text-danger"></span>
     </div>
 
-    <div class="mb-3">
-        <label asp-for="Location" class="form-label"></label>
+    <div class="form-group">
+        <label asp-for="Location" class="control-label"></label>
         <input asp-for="Location" class="form-control" />
         <span asp-validation-for="Location" class="text-danger"></span>
     </div>
 
-    <div class="mb-3">
-        <label asp-for="Description" class="form-label"></label>
-        <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+    <div class="form-group">
+        <label asp-for="Description" class="control-label"></label>
+        <textarea asp-for="Description" class="form-control" rows="5"></textarea>
         <span asp-validation-for="Description" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-primary w-100">Submit Incident</button>
-    <div class="text-center mt-3">
-        <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Cancel / Back</a>
+    <div class="form-group mt-3">
+        <input type="submit" value="Submit Report" class="btn btn-primary" />
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
     </div>
 </form>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
-
-
-

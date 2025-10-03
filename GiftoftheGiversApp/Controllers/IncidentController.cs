@@ -2,82 +2,66 @@
 using GiftoftheGiversApp.Models.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
-using Microsoft.AspNetCore.Mvc;
+
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+
 
 
 namespace GiftoftheGiversApp.Controllers
 {
-    public class IncidentController : Controller
+    public class IncidentReportController : Controller
     {
-        private readonly SqlService _sqlService;
+        private readonly ApplicationDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public IncidentController(SqlService sqlService)
+        public IncidentReportController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
-            _sqlService = sqlService;
+            _context = context;
+            _userManager = userManager;
         }
 
-        public IActionResult Index()
+        
+        public async Task<IActionResult> Index()
         {
-            var incidents = new List<IncidentReport>();
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+                return Unauthorized();
 
-            using (var conn = _sqlService.GetConnection())
-            {
-                conn.Open();
-                var cmd = new SqlCommand(@"
-                    SELECT i.IncidentId, i.UserId, i.Date, i.Incident, i.Location, i.Description, u.Name
-                    FROM IncidentReports i
-                    JOIN Users u ON i.UserId = u.UserId", conn);
+            var reports = await _context.IncidentReports
+                .Where(r => r.UserId == user.Id)
+                .OrderByDescending(r => r.Date)
+                .ToListAsync();
 
-                var reader = cmd.ExecuteReader();
-                while (reader.Read())
-                {
-                    incidents.Add(new IncidentReport
-                    {
-                        IncidentId = reader.GetInt32(0),
-                        UserId = reader.GetInt32(1).ToString(),
-
-                        Date = reader.GetDateTime(2),
-                        Incident = reader.GetString(3),
-                        Location = reader.GetString(4),
-
-                        Description = reader.GetString(5),
-
-                    });
-                }
-            }
-
-            return View(incidents);
+            return View(reports);
         }
 
-        public IActionResult Create() => View();
+        
+        public IActionResult Create()
+        {
+            return View();
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(IncidentReport model)
+        public async Task<IActionResult> Create(IncidentReport model)
         {
-            if (!ModelState.IsValid) return View(model);
+            ModelState.Remove("UserId");
 
-            using (var conn = _sqlService.GetConnection())
-            {
-                conn.Open();
-                var cmd = new SqlCommand(@"
-                    INSERT INTO IncidentReports (UserId, Date, Incident, Location, Description)
-                    VALUES (@UserId, @Date, @Incident, @Location, @Description)", conn);
+            if (!ModelState.IsValid)
+                return View(model);
 
-                cmd.Parameters.AddWithValue("@UserId", model.UserId);
-                cmd.Parameters.AddWithValue("@Date", model.Date);
-                cmd.Parameters.AddWithValue("@Incident", model.Incident);
-                cmd.Parameters.AddWithValue("@Location", model.Location);
-                cmd.Parameters.AddWithValue("@Description", model.Description);
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+                return Unauthorized();
 
-                cmd.ExecuteNonQuery();
-            }
+            model.UserId = user.Id;
+            model.Date = DateTime.Now;
 
-            return RedirectToAction("Index");
+            _context.IncidentReports.Add(model);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }
-
-
-
-

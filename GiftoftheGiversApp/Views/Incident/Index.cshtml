@@ -1,0 +1,40 @@
+﻿@model IEnumerable<GiftoftheGiversApp.Models.Entities.IncidentReport>
+
+@{
+    ViewData["Title"] = "Your Incident Reports";
+}
+
+<h2>My Incident Reports</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Report New Incident</a>
+</p>
+
+@if (!Model.Any())
+{
+    <p>No incident reports submitted yet.</p>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Incident</th>
+                <th>Location</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var report in Model)
+            {
+                <tr>
+                    <td>@report.Date.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>@report.Incident</td>
+                    <td>@report.Location</td>
+                    <td>@report.Description</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

@@ -1,0 +1,48 @@
+﻿@@model IEnumerable<GiftoftheGiverApp.Models.Volunteer>
+
+@{
+    ViewData["Title"] = "Volunteer Registration Details";
+}
+
+    <h2>My Volunteer Registration</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+        <div class="alert alert-warning">
+            @TempData["ErrorMessage"]
+        </div>
+}
+
+@if (!Model.Any())
+{
+        <p>You haven’t registered as a volunteer yet.</p>
+        <a asp-action="Create" class="btn btn-primary">Become a Volunteer</a>
+}
+else
+{
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Task Type</th>
+                    <th>Availability</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var volunteer in Model)
+                {
+                    <tr>
+                        <td>@volunteer.TaskType</td>
+                        <td>@volunteer.Availability.ToString("yyyy-MM-dd HH:mm")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+}
+

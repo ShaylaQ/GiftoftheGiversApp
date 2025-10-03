@@ -1,33 +1,29 @@
 ﻿@model GiftoftheGiversApp.Models.Entities.Donation
 
 @{
-    ViewData["Title"] = "Make a Donation";
-    Layout = "~/Views/Shared/_AccountLayout.cshtml";
+    ViewData["Title"] = "Donation Details";
 }
 
-<h2 class="text-center mb-4">Make a Donation</h2>
+<h2>Create Donation</h2>
 
 <form asp-action="Create" method="post">
-    @Html.AntiForgeryToken()
-
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-    <div class="mb-3">
-        <label asp-for="Type" class="form-label"></label>
+    <div class="form-group">
+        <label asp-for="Type" class="control-label"></label>
         <input asp-for="Type" class="form-control" />
         <span asp-validation-for="Type" class="text-danger"></span>
     </div>
 
-    <div class="mb-3">
-        <label asp-for="AidQuantity" class="form-label"></label>
-        <input asp-for="AidQuantity" class="form-control" type="number" min="1" />
+    <div class="form-group">
+        <label asp-for="AidQuantity" class="control-label"></label>
+        <input asp-for="AidQuantity" class="form-control" />
         <span asp-validation-for="AidQuantity" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-primary w-100">Submit Donation</button>
-
-    <div class="text-center mt-3">
-        <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Cancel / Back</a>
+    <div class="form-group mt-3">
+        <input type="submit" value="Submit Donation" class="btn btn-primary" />
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
     </div>
 </form>
 
@@ -36,4 +32,6 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
+
+
 

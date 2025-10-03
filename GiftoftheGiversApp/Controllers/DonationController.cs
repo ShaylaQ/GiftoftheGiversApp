@@ -1,76 +1,72 @@
 ﻿using GiftoftheGiversApp.Data;
+using GiftoftheGiversApp.Models;
 using GiftoftheGiversApp.Models.Entities;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace GiftoftheGiversApp.Controllers
 {
     public class DonationController : Controller
     {
-        private readonly SqlService _sqlService;
+        private readonly ApplicationDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public DonationController(SqlService sqlService)
+        public DonationController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
-            _sqlService = sqlService;
+            _context = context;
+            _userManager = userManager;
         }
 
-        public IActionResult Index()
+       
+        public async Task<IActionResult> Index()
         {
-            var donations = new List<Donation>();
-
-            using (var conn = _sqlService.GetConnection())
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
             {
-                conn.Open();
-                var cmd = new SqlCommand(@"
-                    SELECT d.DonationId, d.UserId, d.Date, d.Type, d.AidQuantity, u.Name
-                    FROM Donations d
-                    JOIN Users u ON d.UserId = u.UserId", conn);
-
-                var reader = cmd.ExecuteReader();
-                while (reader.Read())
-                {
-                    donations.Add(new Donation
-                    {
-                        DonationId = reader.GetInt32(0),
-                        UserId = reader.GetInt32(1).ToString(),
-
-                        Date = reader.GetDateTime(2),
-                        Type = reader.GetString(3),
-                        AidQuantity = reader.GetInt32(4),
-
-                    });
-                }
+                return Unauthorized();
             }
+
+            var donations = await _context.Donations
+                .Where(d => d.UserId == user.Id)
+                .OrderByDescending(d => d.Date)
+                .ToListAsync();
 
             return View(donations);
         }
 
-        public IActionResult Create() => View();
+  
+        public IActionResult Create()
+        {
+            return View();
+        }
 
+     
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Donation model)
+        public async Task<IActionResult> Create(Donation model)
         {
-            if (!ModelState.IsValid) return View(model);
+         
+            ModelState.Remove("UserId");
 
-            using (var conn = _sqlService.GetConnection())
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
             {
-                conn.Open();
-                var cmd = new SqlCommand(@"
-                    INSERT INTO Donations (UserId, Date, Type, AidQuantity)
-                    VALUES (@UserId, @Date, @Type, @AidQuantity)", conn);
-
-                cmd.Parameters.AddWithValue("@UserId", model.UserId);
-                cmd.Parameters.AddWithValue("@Date", model.Date);
-                cmd.Parameters.AddWithValue("@Type", model.Type);
-                cmd.Parameters.AddWithValue("@AidQuantity", model.AidQuantity);
-
-                cmd.ExecuteNonQuery();
+                return Unauthorized();
             }
 
-            return RedirectToAction("Index");
+            model.UserId = user.Id;
+            model.Date = DateTime.Now;
+
+            _context.Donations.Add(model);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }
+

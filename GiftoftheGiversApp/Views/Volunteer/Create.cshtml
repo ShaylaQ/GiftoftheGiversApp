@@ -1,33 +1,30 @@
 ﻿@model GiftoftheGiversApp.Models.Entities.Volunteer
 
 @{
-    ViewData["Title"] = "Volunteer";
-    Layout = "~/Views/Shared/_AccountLayout.cshtml";
+    ViewData["Title"] = "Become one of our Volunteer";
 }
 
-<h2 class="text-center mb-4">Volunteer for a Task</h2>
+<h2>Become a Volunteer</h2>
+<p class="text-muted">Join us in helping others. Fill out the form to register as a volunteer.</p>
 
 <form asp-action="Create" method="post">
-    @Html.AntiForgeryToken()
-
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-    <div class="mb-3">
-        <label asp-for="TaskType" class="form-label"></label>
-        <input asp-for="TaskType" class="form-control" />
+    <div class="form-group">
+        <label asp-for="TaskType" class="control-label"></label>
+        <input asp-for="TaskType" class="form-control" placeholder="e.g. Food distribution, Admin support" />
         <span asp-validation-for="TaskType" class="text-danger"></span>
     </div>
 
-    <div class="mb-3">
-        <label asp-for="Availabilty" class="form-label"></label>
-        <input asp-for="Availabilty" class="form-control" type="datetime-local" />
-        <span asp-validation-for="Availabilty" class="text-danger"></span>
+    <div class="form-group">
+        <label asp-for="Availability" class="control-label"></label>
+        <input asp-for="Availability" type="datetime-local" class="form-control" />
+        <span asp-validation-for="Availability" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-primary w-100">Submit Availability</button>
-
-    <div class="text-center mt-3">
-        <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Cancel / Back</a>
+    <div class="form-group mt-3">
+        <button type="submit" class="btn btn-success">Register</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
     </div>
 </form>
 

@@ -1,0 +1,39 @@
+﻿@model IEnumerable<GiftoftheGiversApp.Models.Entities.Donation>
+
+@{
+    ViewData["Title"] = "Your Donations";
+}
+
+<h2>My Donations</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New Donation</a>
+</p>
+
+@if (!Model.Any())
+{
+    <p>No donations have been made yet.</p>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Quantity</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var donation in Model)
+            {
+                <tr>
+                    <td>@donation.Type</td>
+                    <td>@donation.AidQuantity</td>
+                    <td>@donation.Date.ToString("yyyy-MM-dd HH:mm")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+

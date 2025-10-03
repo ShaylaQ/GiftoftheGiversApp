@@ -9,9 +9,15 @@ namespace GiftoftheGiversApp.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
         public DbSet<IncidentReport> IncidentReports { get; set; }
-        // Add DbSets for Donations, Volunteers, etc.
+        public DbSet<Donation> Donations { get; set; }
+        public DbSet<Volunteer> Volunteers { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+
+        }
     }
 }
-
 
 
