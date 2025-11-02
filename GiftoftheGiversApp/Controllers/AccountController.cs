@@ -6,6 +6,7 @@ using Azure.Identity;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata;
+using GiftoftheGiversApp.Data;
 
 namespace GiftoftheGiversApp.Controllers
 {
@@ -13,11 +14,17 @@ namespace GiftoftheGiversApp.Controllers
     {
         private readonly SignInManager<User> signInManager;
         private readonly UserManager<User> userManager;
+        private ApplicationDbContext context;
 
         public AccountController(SignInManager<User> signInManager, UserManager<User> userManager)
         {
             this.signInManager = signInManager;
             this.userManager = userManager;
+        }
+
+        public AccountController(ApplicationDbContext context)
+        {
+            this.context = context;
         }
 
         public IActionResult Login()

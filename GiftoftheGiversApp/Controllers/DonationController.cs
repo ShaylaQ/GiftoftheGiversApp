@@ -12,6 +12,8 @@ namespace GiftoftheGiversApp.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<IdentityUser> _userManager;
+        private ApplicationDbContext context;
+        private UserManager<User> userManager;
 
         public DonationController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
@@ -19,7 +21,12 @@ namespace GiftoftheGiversApp.Controllers
             _userManager = userManager;
         }
 
-       
+        public DonationController(ApplicationDbContext context, UserManager<User> userManager)
+        {
+            this.context = context;
+            this.userManager = userManager;
+        }
+
         public async Task<IActionResult> Index()
         {
             var user = await _userManager.GetUserAsync(User);
