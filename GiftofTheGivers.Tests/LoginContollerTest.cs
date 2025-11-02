@@ -10,6 +10,7 @@ using System;
 using System.Threading.Tasks;
 using Xunit;
 
+//Used xunit for login test instead of MSTest. Test passed (Screenshot provided).
 namespace GiftoftheGiversApp.Tests
 {
     public class LoginControllerTest
