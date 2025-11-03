@@ -1,0 +1,58 @@
+# ASP.NET Core / .NET Framework CI/CD pipeline
+# Builds solution, runs MSTest unit/integration tests (excluding UI/Selenium), and deploys to Azure Web App
+
+trigger:
+- master
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  solution: '/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  artifactName: 'WebApp'
+
+steps:
+
+# -----------------------------
+# Step 1: Install NuGet
+# -----------------------------
+- task: NuGetToolInstaller@1
+  displayName: 'Install NuGet'
+
+# -----------------------------
+# Step 2: Restore NuGet packages
+# -----------------------------
+- task: NuGetCommand@2
+  displayName: 'Restore NuGet packages'
+  inputs:
+    restoreSolution: '$(solution)'
+
+# -----------------------------
+# Step 3: Build solution
+# -----------------------------
+- task: VSBuild@1
+  displayName: 'Build solution'
+  inputs:
+    solution: '$(solution)'
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+
+# -----------------------------
+# Step 4: Run MSTest Unit and Integration Tests
+# -----------------------------
+- task: VSTest@2
+  displayName: 'Run MSTest Unit/Integration Tests'
+  inputs:
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+    testAssemblyVer2: |
+      **\*Tests.dll          # Run all test projects ending with Tests.dll
+      !\*UITesting.dll     # Exclude Selenium/UI tests
+    searchFolder: '$(System.DefaultWorkingDirectory)'
+    testFiltercriteria: 'TestCategory!=UI' # Optional: exclude UI tests marked with [TestCategory("UI")]
+    codeCoverageEnabled: true
+    diagnosticsEnabled: true
+    publishRunAttachments: true
