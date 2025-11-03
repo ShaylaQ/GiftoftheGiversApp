@@ -29,8 +29,8 @@ namespace GiftoftheGiversApp.Tests
             var user = new User
             {
                 Id = Guid.NewGuid().ToString(),
-                UserName = "shaylatest",
-                Email = "shayla@test.com",
+                UserName = "Valentynshayla@donor.com",
+                Email = "Valentynshayla@donor.com",
                 Name = "Shayla"
             };
 
@@ -69,11 +69,11 @@ namespace GiftoftheGiversApp.Tests
         [TestMethod]
         public async Task Index_ReturnsVolunteersForUser()
         {
-            // Arrange
+           
             var context = GetInMemoryDbContext();
             var userManager = GetUserManager(context);
             var controller = GetController(context, userManager);
-            var user = await userManager.FindByEmailAsync("shayla@test.com");
+            var user = await userManager.FindByEmailAsync("Valentynshayla@donor.com");
 
             context.Volunteers.Add(new Volunteer
             {
@@ -83,10 +83,9 @@ namespace GiftoftheGiversApp.Tests
             });
             context.SaveChanges();
 
-            // Act
+         
             var result = await controller.Index() as ViewResult;
 
-            // Assert
             Assert.IsNotNull(result);
             var model = result.Model as List<Volunteer>;
             Assert.IsNotNull(model);
@@ -96,11 +95,11 @@ namespace GiftoftheGiversApp.Tests
         [TestMethod]
         public async Task Create_Post_AddsVolunteer()
         {
-            // Arrange
+            
             var context = GetInMemoryDbContext();
             var userManager = GetUserManager(context);
             var controller = GetController(context, userManager);
-            var user = await userManager.FindByEmailAsync("shayla@test.com");
+            var user = await userManager.FindByEmailAsync("Valentynshayla@donor.com");
 
             var volunteer = new Volunteer
             {
@@ -108,10 +107,9 @@ namespace GiftoftheGiversApp.Tests
                 Availability = DateTime.Now.AddDays(2)
             };
 
-            // Act
             var result = await controller.Create(volunteer) as RedirectToActionResult;
 
-            // Assert
+            
             Assert.IsNotNull(result);
             Assert.AreEqual(nameof(VolunteerController.Index), result.ActionName);
             Assert.AreEqual(1, context.Volunteers.Count());
@@ -120,11 +118,11 @@ namespace GiftoftheGiversApp.Tests
         [TestMethod]
         public async Task Create_DuplicateVolunteer_ReturnsRedirectWithError()
         {
-            // Arrange
+            
             var context = GetInMemoryDbContext();
             var userManager = GetUserManager(context);
             var controller = GetController(context, userManager);
-            var user = await userManager.FindByEmailAsync("shayla@test.com");
+            var user = await userManager.FindByEmailAsync("Valentynshayla@donor.com");
 
             context.Volunteers.Add(new Volunteer
             {

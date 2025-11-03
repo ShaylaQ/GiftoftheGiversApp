@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -29,8 +30,8 @@ namespace GiftoftheGiversApp.Tests
             var user = new User
             {
                 Id = Guid.NewGuid().ToString(),
-                UserName = "shaylatest",
-                Email = "shayla@test.com",
+                UserName = "Valentynshayla@donor.com",
+                Email = "Valentynshayla@donor.com",
                 Name = "Shayla"
             };
 
@@ -69,7 +70,7 @@ namespace GiftoftheGiversApp.Tests
         [TestMethod]
         public async Task Index_ReturnsReportsForUser()
         {
-            // Arrange
+            
             var context = GetInMemoryDbContext();
             var userManager = GetUserManager(context);
             var controller = GetController(context, userManager);
@@ -85,10 +86,10 @@ namespace GiftoftheGiversApp.Tests
             });
             context.SaveChanges();
 
-            // Act
+            
             var result = await controller.Index() as ViewResult;
 
-            // Assert
+            
             Assert.IsNotNull(result);
             var model = result.Model as List<IncidentReport>;
             Assert.IsNotNull(model);
@@ -134,10 +135,9 @@ namespace GiftoftheGiversApp.Tests
                 Description = "Water leak in hall."
             };
 
-            // Act
+        
             var result = await controller.Create(model) as ViewResult;
 
-            // Assert
             Assert.IsNotNull(result);
             Assert.AreEqual(model, result.Model);
         }

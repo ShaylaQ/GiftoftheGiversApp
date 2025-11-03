@@ -29,9 +29,9 @@ namespace GiftoftheGiversApp.Tests
             // Seed user
             var user = new User
             {
-                UserName = "shaylatest",
-                Email = "shayla@test.com",
-                Name = "Shayla"
+                Id = Guid.NewGuid().ToString(),
+                UserName = "Valentynshayla@donor.com",
+                Email = "Valentynshayla@donor.com",
             };
             var hasher = new PasswordHasher<User>();
             user.PasswordHash = hasher.HashPassword(user, "Shayla123");
@@ -66,7 +66,7 @@ namespace GiftoftheGiversApp.Tests
             var userManager = GetUserManager(context);
             var controller = GetController(context, userManager);
 
-            var user = await userManager.FindByEmailAsync("Shayla@test.com");
+            var user = await userManager.FindByEmailAsync("Valentynshayla@donor.com");
 
             context.Donations.Add(new Donation
             {
@@ -94,7 +94,7 @@ namespace GiftoftheGiversApp.Tests
             var userManager = GetUserManager(context);
             var controller = GetController(context, userManager);
 
-            var user = await userManager.FindByEmailAsync("Shayla@test.com");
+            var user = await userManager.FindByEmailAsync("Valentynshayla@donor.com");
 
             var donation = new Donation
             {

@@ -26,8 +26,9 @@ namespace GiftoftheGiversApp.Tests
             // Seed user for data
             var user = new User
             {
-                UserName = "shaylatest",
-                Email = "shayla@test.com",
+                Id = Guid.NewGuid().ToString(),
+                UserName = "Valentynshayla@donor.com",
+                Email = "Valentynshayla@donor.com",
                 Name = "Shayla"
             };
             var hasher = new PasswordHasher<User>();
@@ -56,8 +57,8 @@ namespace GiftoftheGiversApp.Tests
 
             var model = new LoginViewModel
             {
-                Email = "shayla@test.com",
-                Password = "Shayla123"
+               
+                Email = "Valentynshayla@donor.com",
             };
 
             var result = await controller.Login(model) as RedirectToActionResult;
